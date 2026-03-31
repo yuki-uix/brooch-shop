@@ -41,6 +41,35 @@ body {
   font-family: var(--font-body);
 }
 
+/* Chat markdown rendering */
+.chat-markdown p {
+  margin: 0.25em 0;
+}
+.chat-markdown p:first-child {
+  margin-top: 0;
+}
+.chat-markdown p:last-child {
+  margin-bottom: 0;
+}
+.chat-markdown strong {
+  font-weight: 600;
+  color: var(--color-accent);
+}
+.chat-markdown ol,
+.chat-markdown ul {
+  margin: 0.4em 0;
+  padding-left: 1.4em;
+}
+.chat-markdown ol {
+  list-style: decimal;
+}
+.chat-markdown ul {
+  list-style: disc;
+}
+.chat-markdown li {
+  margin: 0.15em 0;
+}
+
 @keyframes slideUp {
   from {
     opacity: 0;
