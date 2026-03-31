@@ -5,7 +5,7 @@ import { prisma } from "@/lib/prisma";
 export const searchProducts = tool({
   description:
     "搜索符合用户需求的胸针商品。根据关键词、材质名称、价格上限过滤，最多返回 6 件。价格单位为「分」（1 元 = 100 分）。",
-  parameters: z.object({
+  inputSchema: z.object({
     query: z
       .string()
       .describe("搜索关键词，匹配商品名称或描述，如「婚礼」「蝴蝶」「优雅」"),
@@ -57,7 +57,7 @@ export const searchProducts = tool({
 
 export const getProductDetails = tool({
   description: "获取单个商品的完整详情，包括图片、描述、材质、价格。",
-  parameters: z.object({
+  inputSchema: z.object({
     productId: z.string().describe("商品 ID"),
   }),
   execute: async ({ productId }) => {

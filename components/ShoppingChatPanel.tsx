@@ -12,7 +12,7 @@ export function ShoppingChatPanel() {
   const [input, setInput] = useState("");
   const [paddingBottom, setPaddingBottom] = useState(0);
   const messagesEndRef = useRef<HTMLDivElement>(null);
-  const inputRef = useRef<HTMLInputElement>(null);
+  const inputRef = useRef<HTMLTextAreaElement>(null);
 
   const { messages, sendMessage, status } = useChat({ transport });
 
@@ -44,12 +44,27 @@ export function ShoppingChatPanel() {
     }
   }, [open]);
 
+  const resizeTextarea = () => {
+    const el = inputRef.current;
+    if (!el) return;
+    el.style.height = "auto";
+    el.style.height = `${Math.min(el.scrollHeight, 120)}px`;
+  };
+
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     const text = input.trim();
     if (!text || isLoading) return;
     sendMessage({ text });
     setInput("");
+    if (inputRef.current) inputRef.current.style.height = "auto";
+  };
+
+  const handleKeyDown = (e: React.KeyboardEvent<HTMLTextAreaElement>) => {
+    if (e.key === "Enter" && !e.shiftKey) {
+      e.preventDefault();
+      handleSubmit(e);
+    }
   };
 
   return (
@@ -142,15 +157,20 @@ export function ShoppingChatPanel() {
         {/* Input */}
         <form
           onSubmit={handleSubmit}
-          className="flex items-center gap-2 border-t border-border px-4 py-3"
+          className="flex items-end gap-2 border-t border-border px-4 py-3"
         >
-          <input
+          <textarea
             ref={inputRef}
             value={input}
-            onChange={(e) => setInput(e.target.value)}
+            onChange={(e) => {
+              setInput(e.target.value);
+              resizeTextarea();
+            }}
+            onKeyDown={handleKeyDown}
             placeholder="问点什么…"
             disabled={isLoading}
-            className="flex-1 rounded-full border border-border bg-bg px-4 py-2 text-sm text-text outline-none transition-colors placeholder:text-text-secondary focus:border-primary disabled:opacity-50"
+            rows={1}
+            className="flex-1 resize-none overflow-y-hidden rounded-2xl border border-border bg-bg px-4 py-2 text-sm text-text outline-none transition-colors placeholder:text-text-secondary focus:border-primary disabled:opacity-50"
           />
           <button
             type="submit"
