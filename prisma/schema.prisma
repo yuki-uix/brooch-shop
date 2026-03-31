@@ -1,0 +1,79 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  // "sqlite" for local dev, "postgresql" for Supabase production
+  provider = "sqlite"
+  url      = env("DATABASE_URL")
+}
+
+model Material {
+  id       String    @id @default(cuid())
+  name     String    @unique
+  slug     String    @unique
+  products Product[]
+
+  @@map("materials")
+}
+
+model Product {
+  id          String   @id @default(cuid())
+  name        String
+  description String
+  price       Int
+  imageUrl    String   @map("image_url")
+  materialId  String   @map("material_id")
+  material    Material @relation(fields: [materialId], references: [id])
+  createdAt   DateTime @default(now()) @map("created_at")
+  updatedAt   DateTime @updatedAt @map("updated_at")
+
+  @@map("products")
+}
+
+model Order {
+  id              String      @id @default(cuid())
+  orderNumber     String      @unique @map("order_number")
+  customerName    String      @map("customer_name")
+  customerPhone   String      @map("customer_phone")
+  customerAddress String      @map("customer_address")
+  totalAmount     Int         @map("total_amount")
+  status          String      @default("submitted")
+  lines           OrderLine[]
+  createdAt       DateTime    @default(now()) @map("created_at")
+
+  @@map("orders")
+}
+
+model OrderLine {
+  id              String  @id @default(cuid())
+  orderId         String  @map("order_id")
+  order           Order   @relation(fields: [orderId], references: [id])
+  type            String  @default("standard")
+  productId       String? @map("product_id")
+  customRequestId String? @map("custom_request_id")
+  productName     String  @map("product_name")
+  unitPrice       Int     @map("price")
+  quantity        Int
+  imageUrl        String  @map("image_url")
+  materialName    String  @map("material_name")
+  snapshotData    Json?   @map("snapshot_data")
+
+  @@map("order_lines")
+}
+
+/// 用户提交的定制询价（图片与/或文字）；T2.2 起由 AI 评估并写回结果字段
+model CustomRequest {
+  id           String    @id @default(cuid())
+  description  String?   @map("description")
+  imageUrl     String?   @map("image_url")
+  feasibility  String?   @map("feasibility")
+  reason       String?   @map("reason")
+  quoteAmount  Int?      @map("quote_amount")
+  provider     String?   @map("provider")
+  model        String?   @map("model")
+  evaluatedAt  DateTime? @map("evaluated_at")
+  createdAt    DateTime  @default(now()) @map("created_at")
+
+  @@map("custom_requests")
+}
