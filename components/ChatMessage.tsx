@@ -131,6 +131,17 @@ function ToolPartUI({ part }: { part: ToolPart }) {
     return null;
   }
 
+  if (part.state === "output-error") {
+    return (
+      <div className="py-1">
+        <div className="flex items-center gap-1.5 rounded-lg bg-red-50 px-3 py-1.5 text-xs font-medium text-red-600">
+          <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><circle cx="12" cy="12" r="10"/><path d="m15 9-6 6M9 9l6 6"/></svg>
+          {part.errorText ?? "操作失败，请重试"}
+        </div>
+      </div>
+    );
+  }
+
   return null;
 }
 
@@ -147,7 +158,8 @@ export function ChatMessage({ message }: ChatMessageProps) {
   const hasVisibleToolUI = toolParts.some((p) => {
     const name = getToolName(p);
     if (p.state === "input-streaming" || p.state === "input-available") return true;
-    if (name === "addToCart" && (p.state === "output-available" || p.state === "output-error")) return true;
+    if (p.state === "output-error") return true;
+    if (name === "addToCart" && p.state === "output-available") return true;
     if (name === "searchProducts" && p.state === "output-available") {
       const out = p.output as { found: boolean; products: unknown[] };
       return out.found && out.products.length > 0;

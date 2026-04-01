@@ -14,9 +14,10 @@ export function ShoppingChatPanel() {
   const messagesEndRef = useRef<HTMLDivElement>(null);
   const inputRef = useRef<HTMLTextAreaElement>(null);
 
-  const { messages, sendMessage, status } = useChat({ transport });
+  const { messages, sendMessage, status, error } = useChat({ transport });
 
   const isLoading = status === "submitted" || status === "streaming";
+  const hasError = status === "error";
 
   // Scroll to bottom whenever messages update
   useEffect(() => {
@@ -146,6 +147,19 @@ export function ShoppingChatPanel() {
                     <span className="h-1.5 w-1.5 animate-bounce rounded-full bg-primary-light [animation-delay:0ms]" />
                     <span className="h-1.5 w-1.5 animate-bounce rounded-full bg-primary-light [animation-delay:150ms]" />
                     <span className="h-1.5 w-1.5 animate-bounce rounded-full bg-primary-light [animation-delay:300ms]" />
+                  </div>
+                </div>
+              )}
+              {hasError && (
+                <div className="flex gap-2">
+                  <div className="flex h-7 w-7 shrink-0 items-center justify-center rounded-full bg-red-100 text-xs">
+                    ⚠️
+                  </div>
+                  <div className="max-w-[80%] rounded-xl rounded-tl-none bg-red-50 px-3 py-2 text-sm text-red-600">
+                    <p className="font-medium">抱歉，出了点问题</p>
+                    <p className="mt-0.5 text-xs text-red-500">
+                      {error?.message || "请求失败，请稍后再试"}
+                    </p>
                   </div>
                 </div>
               )}
