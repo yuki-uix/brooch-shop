@@ -29,7 +29,9 @@ export function ProductCard({ id, name, price, imageUrl, material }: ProductCard
         <h3 className="text-sm font-semibold leading-snug line-clamp-2 group-hover:text-accent transition-colors">
           {name}
         </h3>
-        <MaterialTag name={material.name} />
+        <div className="flex flex-wrap gap-1">
+          <MaterialTag name={material.name} />
+        </div>
         <p className="mt-auto text-lg font-bold text-accent">
           {formatPrice(price)}
         </p>

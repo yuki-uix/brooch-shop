@@ -1,5 +1,6 @@
 "use client";
 
+import { useEffect, useRef } from "react";
 import Link from "next/link";
 import { useCartStore } from "@/lib/store/cart";
 
@@ -7,6 +8,18 @@ export function Header() {
   const count = useCartStore((s) =>
     s.items.reduce((sum, item) => sum + item.quantity, 0),
   );
+
+  const prevCountRef = useRef(count);
+  const badgeRef = useRef<HTMLSpanElement>(null);
+
+  useEffect(() => {
+    if (count > prevCountRef.current && badgeRef.current) {
+      badgeRef.current.classList.remove("animate-cart-bump");
+      void badgeRef.current.offsetWidth;
+      badgeRef.current.classList.add("animate-cart-bump");
+    }
+    prevCountRef.current = count;
+  }, [count]);
 
   return (
     <header className="sticky top-0 z-50 border-b border-border bg-bg-card/80 backdrop-blur-md">
@@ -43,7 +56,10 @@ export function Header() {
               <path d="M2.05 2.05h2l2.66 12.42a2 2 0 0 0 2 1.58h9.78a2 2 0 0 0 1.95-1.57l1.65-7.43H5.12" />
             </svg>
             {count > 0 && (
-              <span className="absolute -right-2 -top-2 flex h-4 min-w-4 items-center justify-center rounded-full bg-accent px-1 text-[10px] font-bold leading-none text-white">
+              <span
+                ref={badgeRef}
+                className="absolute -right-2 -top-2 flex h-4 min-w-4 items-center justify-center rounded-full bg-accent px-1 text-[10px] font-bold leading-none text-white"
+              >
                 {count > 99 ? "99+" : count}
               </span>
             )}
