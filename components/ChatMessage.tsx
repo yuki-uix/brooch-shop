@@ -2,6 +2,11 @@ import { useEffect } from "react";
 import type { UIMessage } from "ai";
 import Markdown from "react-markdown";
 import { useCartStore } from "@/lib/store/cart";
+import {
+  ChatProductList,
+  ChatProductDetail,
+  type ProductSummary,
+} from "./ChatProductCard";
 
 interface ChatMessageProps {
   message: UIMessage;
@@ -110,6 +115,22 @@ function ToolPartUI({ part }: { part: ToolPart }) {
     );
   }
 
+  if (toolName === "searchProducts" && part.state === "output-available") {
+    const output = part.output as { found: boolean; products: ProductSummary[] };
+    if (output.found && output.products.length > 0) {
+      return <ChatProductList products={output.products} />;
+    }
+    return null;
+  }
+
+  if (toolName === "getProductDetails" && part.state === "output-available") {
+    const output = part.output as { found: boolean; product: ProductSummary | null };
+    if (output.found && output.product) {
+      return <ChatProductDetail product={output.product} />;
+    }
+    return null;
+  }
+
   return null;
 }
 
@@ -125,11 +146,17 @@ export function ChatMessage({ message }: ChatMessageProps) {
 
   const hasVisibleToolUI = toolParts.some((p) => {
     const name = getToolName(p);
-    return (
-      p.state === "input-streaming" ||
-      p.state === "input-available" ||
-      (name === "addToCart" && (p.state === "output-available" || p.state === "output-error"))
-    );
+    if (p.state === "input-streaming" || p.state === "input-available") return true;
+    if (name === "addToCart" && (p.state === "output-available" || p.state === "output-error")) return true;
+    if (name === "searchProducts" && p.state === "output-available") {
+      const out = p.output as { found: boolean; products: unknown[] };
+      return out.found && out.products.length > 0;
+    }
+    if (name === "getProductDetails" && p.state === "output-available") {
+      const out = p.output as { found: boolean; product: unknown };
+      return out.found && !!out.product;
+    }
+    return false;
   });
 
   if (!textContent && toolParts.length === 0) return null;
