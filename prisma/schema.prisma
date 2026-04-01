@@ -3,9 +3,9 @@ generator client {
 }
 
 datasource db {
-  // "sqlite" for local dev, "postgresql" for Supabase production
-  provider = "sqlite"
-  url      = env("DATABASE_URL")
+  provider  = "postgresql"
+  url       = env("DATABASE_URL")
+  directUrl = env("DIRECT_URL")
 }
 
 model Material {
