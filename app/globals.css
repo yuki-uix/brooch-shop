@@ -80,3 +80,13 @@ body {
     transform: translateY(0);
   }
 }
+
+@keyframes cartBump {
+  0%   { transform: scale(1); }
+  40%  { transform: scale(1.35); }
+  100% { transform: scale(1); }
+}
+
+.animate-cart-bump {
+  animation: cartBump 250ms ease-out;
+}

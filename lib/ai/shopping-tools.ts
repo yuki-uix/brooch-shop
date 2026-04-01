@@ -55,6 +55,23 @@ export const searchProducts = tool({
   },
 });
 
+/**
+ * addToCart — 服务端 execute 仅做透传（无 DB 调用），
+ * 真正的 Zustand cart 更新在客户端 AddToCartResult 组件 useEffect 中完成。
+ */
+export const addToCart = tool({
+  description:
+    "将指定商品加入用户的购物车。只有在用户明确表示要加购时才调用。调用前必须先通过 searchProducts 或 getProductDetails 获得商品信息。",
+  inputSchema: z.object({
+    productId: z.string().describe("商品 ID"),
+    productName: z.string().describe("商品名称"),
+    price: z.number().describe("商品价格（单位：分）"),
+    imageUrl: z.string().describe("商品图片 URL"),
+    materialName: z.string().describe("材质名称"),
+  }),
+  execute: async (args) => ({ success: true as const, ...args }),
+});
+
 export const getProductDetails = tool({
   description: "获取单个商品的完整详情，包括图片、描述、材质、价格。",
   inputSchema: z.object({
