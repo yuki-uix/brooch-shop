@@ -3,11 +3,10 @@ generator client {
 }
 
 datasource db {
-  // Local dev: provider = "sqlite", DATABASE_URL = "file:./dev.db"
-  // Production: provider = "postgresql", set DATABASE_URL + DIRECT_URL
-  provider  = "sqlite"
+  provider  = "postgresql"
   url       = env("DATABASE_URL")
-  // directUrl = env("DIRECT_URL")   // Uncomment for Supabase / Neon production
+  directUrl = env("DIRECT_URL")
+
 }
 
 model Material {
