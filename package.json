@@ -25,16 +25,18 @@
     "@ai-sdk/google": "^3.0.54",
     "@ai-sdk/openai": "^3.0.49",
     "@ai-sdk/react": "^3.0.143",
-    "@next/swc-darwin-arm64": "^16.2.1",
     "@prisma/client": "^6.19.2",
     "ai": "^6.0.141",
-    "lightningcss-darwin-arm64": "^1.32.0",
     "next": "16.2.1",
     "react": "19.2.4",
     "react-dom": "19.2.4",
     "react-markdown": "^10.1.0",
     "zod": "^4.3.6",
     "zustand": "^5.0.12"
+  },
+  "optionalDependencies": {
+    "@next/swc-darwin-arm64": "^16.2.1",
+    "lightningcss-darwin-arm64": "^1.32.0"
   },
   "devDependencies": {
     "@tailwindcss/postcss": "^4",
