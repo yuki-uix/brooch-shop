@@ -1,6 +1,30 @@
 # Brooch Shop
 
-**Live Demo:** [brooch-shop.vercel.app](https://brooch-shop.vercel.app)
+An AI-powered brooch e-commerce store with a conversational shopping agent.  
+Built as a demo exploring how AI can replace filter-based navigation in product discovery.
+
+**[Live Demo →](https://brooch-shop.vercel.app/)**
+
+---
+
+## What this covers
+
+- Product catalog with material-based filtering (珍珠 / 纯银 / 贝母 / 锆石)
+- Product detail page + cart
+- Custom order request with AI evaluation
+- **AI shopping agent** — tool calling over real product data:
+  - Search products by description or material
+  - Fetch product details
+  - Add to cart
+  - Handle custom design inquiries
+
+## Background
+
+筛选器能帮用户缩小范围，但当用户说"我想要一个适合送妈妈生日的胸针"，  
+筛选器就失效了——这正是 agent 介入的边界。
+
+→ [阅读文章：筛选器解决不了的问题，Agent 从这里开始](https://mp.weixin.qq.com/s/0cYIyTyU8XbWh4epNTGQqw)  
+→ [Writing on Juejin](https://juejin.cn/user/3582625834347100)
 
 ---
 
